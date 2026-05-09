@@ -69,4 +69,24 @@ export class JobsService {
       data: updatedJob,
     };
   }
+
+  async getStats() {
+  const result = await this.jobsRepository
+    .createQueryBuilder('job')
+    .select('SUM(job.amount)', 'totalGanado')
+    .addSelect('COUNT(job.id)', 'cantidadTrabajos')
+    .getRawOne<{
+      totalGanado: string;
+      cantidadTrabajos: string;
+    }>();
+
+  return {
+    message: 'Estadísticas obtenidas con éxito',
+    data: {
+      totalGanado: Number(result?.totalGanado) || 0,
+      cantidadTrabajos:
+        Number(result?.cantidadTrabajos) || 0,
+    },
+  };
+}
 }
