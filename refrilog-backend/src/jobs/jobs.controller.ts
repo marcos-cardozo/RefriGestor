@@ -1,9 +1,22 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
-
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateJobDto } from './dto/create-job.dto';
 import { JobsService } from './jobs.service';
 import { UpdateJobDto } from './dto/update-job.dto';
+import { FilterJobsDto } from './dto/filter-jobs.dto';
 
+@ApiTags('Jobs')
 @Controller('jobs')
 export class JobsController {
   constructor(private readonly jobsService: JobsService) {}
@@ -14,29 +27,47 @@ export class JobsController {
   }
 
   @Get()
-  findAll() {
-    return this.jobsService.findAll();
+  @ApiOperation({
+    summary: 'Obtener todos los trabajos',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de trabajos obtenida con éxito',
+  })
+  findAll(@Query() filters: FilterJobsDto) {
+    return this.jobsService.findAll(filters);
   }
 
   @Delete(':id')
-remove(
-  @Param('id', new ParseUUIDPipe())
-  id: string,
-) {
-  return this.jobsService.remove(id);
-}
+  @ApiOperation({
+    summary: 'Eliminar un trabajo',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Trabajo eliminado con éxito',
+  })
+  remove(
+    @Param('id', new ParseUUIDPipe())
+    id: string,
+  ) {
+    return this.jobsService.remove(id);
+  }
 
-@Patch(':id')
-update(
-  @Param('id', new ParseUUIDPipe())
-  id: string,
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Actualizar un trabajo',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Trabajo actualizado con éxito',
+  })
+  update(
+    @Param('id', new ParseUUIDPipe())
+    id: string,
 
-  @Body()
-  updateJobDto: UpdateJobDto,
-) {
-  return this.jobsService.update(
-    id,
-    updateJobDto,
-  );
-}
+    @Body()
+    updateJobDto: UpdateJobDto,
+  ) {
+    return this.jobsService.update(id, updateJobDto);
+  }
 }

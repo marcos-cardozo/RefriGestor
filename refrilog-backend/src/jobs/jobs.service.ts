@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateJobDto } from './dto/create-job.dto';
 import { Job } from './entities/job.entity';
 import { UpdateJobDto } from './dto/update-job.dto';
+import { FilterJobsDto } from './dto/filter-jobs.dto';
 
 @Injectable()
 export class JobsService {
@@ -21,19 +22,6 @@ export class JobsService {
     return {
       message: 'El trabajo fue agregado a la lista con éxito',
       data: savedJob,
-    };
-  }
-
-  async findAll() {
-    const jobs = await this.jobsRepository.find({
-      order: {
-        createdAt: 'DESC',
-      },
-    });
-
-    return {
-      message: 'Trabajos obtenidos con éxito',
-      data: jobs,
     };
   }
 
@@ -71,21 +59,76 @@ export class JobsService {
   }
 
   async getStats() {
-  const result = await this.jobsRepository
-    .createQueryBuilder('job')
-    .select('SUM(job.amount)', 'totalGanado')
-    .addSelect('COUNT(job.id)', 'cantidadTrabajos')
-    .getRawOne<{
-      totalGanado: string;
-      cantidadTrabajos: string;
-    }>();
+    const result = await this.jobsRepository
+      .createQueryBuilder('job')
+      .select('SUM(job.amount)', 'totalGanado')
+      .addSelect('COUNT(job.id)', 'cantidadTrabajos')
+      .getRawOne<{
+        totalGanado: string;
+        cantidadTrabajos: string;
+      }>();
+
+    return {
+      message: 'Estadísticas obtenidas con éxito',
+      data: {
+        totalGanado: Number(result?.totalGanado) || 0,
+        cantidadTrabajos: Number(result?.cantidadTrabajos) || 0,
+      },
+    };
+  }
+
+  async findAll(filters: FilterJobsDto) {
+  const {
+    clientName,
+    date,
+    page = '1',
+    limit = '10',
+  } = filters;
+
+  const query =
+    this.jobsRepository.createQueryBuilder('job');
+
+  if (clientName) {
+    query.andWhere(
+      'LOWER(job.clientName) LIKE LOWER(:clientName)',
+      {
+        clientName: `%${clientName}%`,
+      },
+    );
+  }
+
+  if (date) {
+    query.andWhere(
+      'TO_CHAR(job.date, \'YYYY-MM\') = :date',
+      {
+        date,
+      },
+    );
+  }
+
+  query.orderBy('job.createdAt', 'DESC');
+
+  const pageNumber = Number(page);
+  const limitNumber = Number(limit);
+
+  const skip =
+    (pageNumber - 1) * limitNumber;
+
+  query.skip(skip).take(limitNumber);
+
+  const [jobs, total] =
+    await query.getManyAndCount();
 
   return {
-    message: 'Estadísticas obtenidas con éxito',
-    data: {
-      totalGanado: Number(result?.totalGanado) || 0,
-      cantidadTrabajos:
-        Number(result?.cantidadTrabajos) || 0,
+    message: 'Trabajos obtenidos con éxito',
+    data: jobs,
+    meta: {
+      page: pageNumber,
+      limit: limitNumber,
+      total,
+      totalPages: Math.ceil(
+        total / limitNumber,
+      ),
     },
   };
 }
