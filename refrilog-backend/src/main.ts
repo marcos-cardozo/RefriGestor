@@ -51,6 +51,8 @@ async function bootstrap() {
   console.log(
     `📚 Swagger docs: http://localhost:${process.env.PORT ?? 3000}/api`,
   );
+
+  console.log(process.env.NODE_ENV);
 }
 
 bootstrap();

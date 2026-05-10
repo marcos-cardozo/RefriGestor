@@ -15,7 +15,7 @@ import { JobsModule } from './jobs/jobs.module';
         type: 'postgres',
         url: process.env.DATABASE_URL,
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: process.env.NODE_ENV !== 'production',
         ssl: {
           rejectUnauthorized: false,
         },
