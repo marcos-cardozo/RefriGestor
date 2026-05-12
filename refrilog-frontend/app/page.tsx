@@ -1,44 +1,52 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useState } from "react";
-
+import { JobCard } from "@/components/JobCard";
+import { Button } from "@/components/Button";
+import { Header } from "@/components/Header";
 import { jobsService } from "@/services/jobs.service";
 import { Job } from "@/types/job";
+import { AddJobModal } from "@/components/AddJobModal";
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [openModal, setOpenModal] = useState(false);
+  const fetchJobs = async () => {
+    try {
+      const response = await jobsService.getAll();
+
+      setJobs(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await jobsService.getAll();
-
-        setJobs(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchJobs();
   }, []);
 
   return (
-    <main className="min-h-screen p-4">
-      <h1 className="mb-6 text-3xl font-bold">RefriLog</h1>
+    <main className="mx-auto min-h-screen max-w-md bg-[#bfd2e6] p-4">
+      <Header />
 
-      <div className="flex flex-col gap-4">
+      <div
+        onClick={() => setOpenModal(true)}
+        className="flex justify-center items-center pt-3! pb-3!"
+      >
+        <Button title="+ Nuevo trabajo" />
+      </div>
+
+      <div className="flex flex-col items-center gap-6">
         {jobs.map((job) => (
-          <div key={job.id} className="rounded-xl bg-zinc-800 p-4 text-white">
-            <h2 className="text-xl font-bold">{job.clientName}</h2>
-
-            <p>${job.amount}</p>
-
-            <p>{job.date}</p>
-
-            <p>{job.description}</p>
-          </div>
+          <JobCard key={job.id} job={job} />
         ))}
       </div>
+      <AddJobModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onJobCreated={fetchJobs}
+      />
     </main>
   );
 }
