@@ -91,7 +91,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="mx-auto min-h-screen max-w-md bg-[#bfd2e6] p-4!">
+    <main className="mx-auto min-h-screen max-w-md bg-linear-to-br from-blue-200 via-slate-200 to-cyan-100 p-4">
       <Header />
       <div className="mb-6! flex flex-col gap-4 mt-5!">
         <div className="rounded-2xl bg-zinc-800 p-5! text-white shadow-lg">
