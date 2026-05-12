@@ -5,7 +5,7 @@ export function Header() {
         ❄️
       </div>
 
-      <h1 className="text-3xl font-bold text-zinc-900">RefriLog</h1>
+      <h1 className="text-3xl font-bold text-zinc-900">RefriGestor</h1>
 
       <p className="mt-1 text-sm text-zinc-700">Gestión de trabajos</p>
     </header>
