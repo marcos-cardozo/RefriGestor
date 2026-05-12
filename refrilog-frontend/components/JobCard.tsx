@@ -2,9 +2,11 @@ import { Job } from "@/types/job";
 
 interface JobCardProps {
   job: Job;
+  onDelete: (id: string) => void;
+  onEdit: (job: Job) => void;
 }
 
-export function JobCard({ job }: JobCardProps) {
+export function JobCard({ job, onDelete, onEdit }: JobCardProps) {
   return (
     <div className="rounded-2xl bg-zinc-800 p-4! text-white shadow-lg w-[80%]">
       <div className="mb-2 flex items-center justify-between">
@@ -22,11 +24,17 @@ export function JobCard({ job }: JobCardProps) {
       <p className="line-clamp-2 text-sm text-zinc-100">{job.description}</p>
 
       <div className="mt-4 flex gap-2 pt-2!">
-        <button className="flex-1 rounded-lg bg-yellow-500 p-2 font-medium text-black transition active:scale-95">
+        <button
+          onClick={() => onEdit(job)}
+          className="flex-1 rounded-lg bg-yellow-500 p-2 font-medium text-black transition active:scale-95"
+        >
           Editar
         </button>
 
-        <button className="flex-1 rounded-lg bg-red-500 p-2 font-medium text-white transition active:scale-95">
+        <button
+          onClick={() => onDelete(job.id)}
+          className="flex-1 rounded-lg bg-red-500 p-2 font-medium text-white transition active:scale-95"
+        >
           Eliminar
         </button>
       </div>

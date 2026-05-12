@@ -1,21 +1,59 @@
 import { useForm } from "react-hook-form";
-
+import { toast } from "sonner";
 import { jobsService } from "@/services/jobs.service";
 import { CreateJob } from "@/types/create-job";
+import { Job } from "@/types/job";
+import { useEffect } from "react";
 
 interface AddJobModalProps {
   open: boolean;
   onClose: () => void;
   onJobCreated: () => void;
+  editingJob: Job | null;
 }
 
-export function AddJobModal({ open, onClose, onJobCreated }: AddJobModalProps) {
+export function AddJobModal({
+  open,
+  onClose,
+  onJobCreated,
+  editingJob,
+}: AddJobModalProps) {
   const { register, handleSubmit, reset } = useForm<CreateJob>();
-  if (!open) return null;
+
+  useEffect(() => {
+    if (editingJob) {
+      reset({
+        clientName: editingJob.clientName,
+
+        description: editingJob.description,
+
+        amount: editingJob.amount,
+
+        date: editingJob.date,
+      });
+    } else {
+      reset({
+        clientName: "",
+        description: "",
+        amount: 0,
+        date: "",
+      });
+    }
+  }, [editingJob, reset]);
 
   const onSubmit = async (data: CreateJob) => {
     try {
-      await jobsService.create(data);
+      if (editingJob) {
+        await jobsService.update(editingJob.id, data);
+
+        toast.success("Trabajo actualizado");
+      } else {
+        await jobsService.create(data);
+
+        toast.success("Trabajo agregado con éxito");
+      }
+
+      toast.success("Trabajo agregado con éxito");
 
       onJobCreated();
 
@@ -23,14 +61,20 @@ export function AddJobModal({ open, onClose, onJobCreated }: AddJobModalProps) {
 
       onClose();
     } catch (error) {
+      toast.error("Error al agregar trabajo");
+
       console.error(error);
     }
   };
+
+  if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="w-[90%] max-w-md rounded-2xl bg-white p-6! ">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold">Nuevo trabajo</h2>
+          <h2 className="text-xl font-bold">
+            {editingJob ? "Editar trabajo" : "Nuevo trabajo"}
+          </h2>
 
           <button
             onClick={onClose}
