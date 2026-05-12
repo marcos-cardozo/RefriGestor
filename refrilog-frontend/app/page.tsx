@@ -49,6 +49,37 @@ export default function Home() {
     0,
   );
 
+  const currentDate = new Date();
+
+  const currentMonth = currentDate.getMonth();
+
+  const currentYear = currentDate.getFullYear();
+
+  const monthlyJobs = jobs.filter((job) => {
+    const jobDate = new Date(job.date);
+
+    return (
+      jobDate.getMonth() === currentMonth &&
+      jobDate.getFullYear() === currentYear
+    );
+  });
+
+  const monthlyTotal = monthlyJobs.reduce(
+    (accumulator, job) => accumulator + Number(job.amount),
+    0,
+  );
+
+  const yearlyJobs = jobs.filter((job) => {
+    const jobDate = new Date(job.date);
+
+    return jobDate.getFullYear() === currentYear;
+  });
+
+  const yearlyTotal = yearlyJobs.reduce(
+    (accumulator, job) => accumulator + Number(job.amount),
+    0,
+  );
+
   const handleEdit = (job: Job) => {
     setEditingJob(job);
 
@@ -62,12 +93,32 @@ export default function Home() {
   return (
     <main className="mx-auto min-h-screen max-w-md bg-[#bfd2e6] p-4!">
       <Header />
-      <div className="mb-5! mt-5! rounded-2xl bg-zinc-800 p-2! text-white shadow-lg flex justify-center items-center flex-col w-[60%] m-auto!">
-        <p className="text-sm text-zinc-300">Total generado</p>
+      <div className="mb-6! flex flex-col gap-4 mt-5!">
+        <div className="rounded-2xl bg-zinc-800 p-5! text-white shadow-lg">
+          <p className="text-sm text-zinc-300">💰 Total generado</p>
 
-        <h2 className="mt-2! text-3xl font-bold text-green-400">
-          ${totalAmount.toLocaleString("es-AR")}
-        </h2>
+          <h2 className="mt-2! text-3xl font-bold text-green-400">
+            ${totalAmount.toLocaleString("es-AR")}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div className="rounded-2xl bg-zinc-800 p-4! text-white shadow-lg">
+            <p className="text-sm text-zinc-300">📅 Este mes</p>
+
+            <h3 className="mt-2! text-xl font-bold text-blue-400">
+              ${monthlyTotal.toLocaleString("es-AR")}
+            </h3>
+          </div>
+
+          <div className="rounded-2xl bg-zinc-800 p-4! text-white shadow-lg">
+            <p className="text-sm text-zinc-300">📈 Este año</p>
+
+            <h3 className="mt-2! text-xl font-bold text-yellow-400">
+              ${yearlyTotal.toLocaleString("es-AR")}
+            </h3>
+          </div>
+        </div>
       </div>
 
       <div

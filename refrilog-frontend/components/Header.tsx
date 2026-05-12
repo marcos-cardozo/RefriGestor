@@ -1,13 +1,13 @@
+import Image from "next/image";
+
 export function Header() {
   return (
-    <header className="mb-6! flex flex-col items-center">
-      <div className="mb-3! flex h-20 w-20 items-center justify-center rounded-full bg-zinc-800 text-3xl text-white">
-        ❄️
-      </div>
+    <header className="flex flex-col items-center">
+      <Image src="/logo.png" alt="RefriLog" width={200} height={200} />
 
-      <h1 className="text-3xl font-bold text-zinc-900">RefriGestor</h1>
-
-      <p className="mt-1! text-sm text-zinc-700">Gestión de trabajos</p>
+      <p className="-mt-10! text-sm bg-amber-50 p-2! rounded-2xl text-zinc-700 ">
+        Gestión de trabajos
+      </p>
     </header>
   );
 }

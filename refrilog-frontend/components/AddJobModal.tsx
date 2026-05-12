@@ -35,7 +35,7 @@ export function AddJobModal({
       reset({
         clientName: "",
         description: "",
-        amount: 0,
+        amount: undefined,
         date: "",
       });
     }
@@ -85,33 +85,47 @@ export function AddJobModal({
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <input
-            type="text"
-            placeholder="Cliente"
-            {...register("clientName")}
-            className="rounded-lg border p-3!"
-          />
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-zinc-700">Cliente</label>
+            <input
+              type="text"
+              placeholder="ej. Juan Pérez"
+              {...register("clientName")}
+              className="rounded-lg border p-3!"
+            />
+          </div>
 
-          <textarea
-            placeholder="Descripción"
-            {...register("description")}
-            className="rounded-lg border p-3!"
-          />
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-zinc-700">
+              Descripción
+            </label>
+            <textarea
+              placeholder="ej. Carga de gas, reparación, etc."
+              {...register("description")}
+              className="rounded-lg border p-3!"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-zinc-700">Monto</label>
+            <input
+              type="number"
+              placeholder="ej. 15000"
+              {...register("amount", {
+                valueAsNumber: true,
+              })}
+              className="rounded-lg border p-3!"
+            />
+          </div>
 
-          <input
-            type="number"
-            placeholder="Monto"
-            {...register("amount", {
-              valueAsNumber: true,
-            })}
-            className="rounded-lg border p-3!"
-          />
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-zinc-700">Fecha</label>
 
-          <input
-            type="date"
-            {...register("date")}
-            className="rounded-lg border p-3!"
-          />
+            <input
+              type="date"
+              {...register("date")}
+              className="rounded-lg border p-3!"
+            />
+          </div>
 
           <button className="rounded-xl bg-zinc-800 p-4! font-semibold text-white">
             Guardar trabajo
