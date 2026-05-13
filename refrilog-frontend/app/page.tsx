@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
-
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { JobCard } from "@/components/JobCard";
 import { Button } from "@/components/Button";
@@ -9,6 +9,8 @@ import { jobsService } from "@/services/jobs.service";
 import { Job } from "@/types/job";
 import { AddJobModal } from "@/components/AddJobModal";
 import { toast } from "sonner";
+import { AnimatePresence } from "framer-motion";
+import { StatsCard } from "@/components/StatsCard";
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -91,74 +93,70 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="mx-auto min-h-screen max-w-md bg-linear-to-br from-blue-200 via-slate-200 to-cyan-100 p-4">
-      <Header />
-      <div className="mb-6! flex flex-col gap-4 mt-5!">
-        <div className="rounded-2xl bg-zinc-800 p-5! text-white shadow-lg">
-          <p className="text-sm text-zinc-300">💰 Total generado</p>
+    <main className="min-h-screen bg-linear-to-br from-cyan-100 via-blue-100 to-slate-200 p-4!">
+      <div className="mx-auto flex min-h-[calc(100vh-2rem)] max-w-md flex-col rounded-[2.5rem] border border-white/30 bg-white/30 p-5! shadow-2xl backdrop-blur-xl">
+        <Header />
 
-          <h2 className="mt-2! text-3xl font-bold text-green-400">
-            ${totalAmount.toLocaleString("es-AR")}
-          </h2>
+        <div className="mb-4! flex flex-col gap-4">
+          <StatsCard title="Ganancias del mes" value={monthlyTotal} icon="💸" />
+
+          <StatsCard title="Ganancias del año" value={yearlyTotal} icon="📈" />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-2xl bg-zinc-800 p-4! text-white shadow-lg">
-            <p className="text-sm text-zinc-300">📅 Este mes</p>
-
-            <h3 className="mt-2! text-xl font-bold text-blue-400">
-              ${monthlyTotal.toLocaleString("es-AR")}
-            </h3>
-          </div>
-
-          <div className="rounded-2xl bg-zinc-800 p-4! text-white shadow-lg">
-            <p className="text-sm text-zinc-300">📈 Este año</p>
-
-            <h3 className="mt-2! text-xl font-bold text-yellow-400">
-              ${yearlyTotal.toLocaleString("es-AR")}
-            </h3>
-          </div>
+        <div
+          onClick={() => setOpenModal(true)}
+          className="flex justify-center items-center pt-3! pb-3!"
+        >
+          <Button title="+ Nuevo trabajo" />
         </div>
-      </div>
 
-      <div
-        onClick={() => setOpenModal(true)}
-        className="flex justify-center items-center pt-3! pb-3!"
-      >
-        <Button title="+ Nuevo trabajo" />
-      </div>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.12,
+              },
+            },
+          }}
+          className="flex flex-col items-center gap-4"
+        >
+          {loading ? (
+            <div className="mt-16! text-zinc-700">Cargando trabajos...</div>
+          ) : jobs.length > 0 ? (
+            jobs.map((job) => (
+              <JobCard
+                key={job.id}
+                job={job}
+                onDelete={deleteJob}
+                onEdit={handleEdit}
+              />
+            ))
+          ) : (
+            <div className="mt-8! flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-zinc-900/40 p-6! text-center text-white">
+              <span className="mb-2! text-4xl">🧊</span>
 
-      <div className="flex flex-col items-center gap-6">
-        {loading ? (
-          <div className="mt-16! text-zinc-700">Cargando trabajos...</div>
-        ) : jobs.length > 0 ? (
-          jobs.map((job) => (
-            <JobCard
-              key={job.id}
-              job={job}
-              onDelete={deleteJob}
-              onEdit={handleEdit}
+              <h2 className="mb-1! text-lg font-bold">No hay trabajos</h2>
+
+              <p className="max-w-[220px] text-sm text-zinc-400">
+                Agregá el primer trabajo para comenzar.
+              </p>
+            </div>
+          )}
+        </motion.div>
+        <AnimatePresence>
+          {openModal && (
+            <AddJobModal
+              open={openModal}
+              onClose={() => setOpenModal(false)}
+              onJobCreated={fetchJobs}
+              editingJob={editingJob}
             />
-          ))
-        ) : (
-          <div className="mt-16 flex flex-col items-center text-center">
-            <span className="mb-4 text-6xl">❄️</span>
-
-            <h2 className="text-xl font-bold text-zinc-700">No hay trabajos</h2>
-
-            <p className="mt-2 text-zinc-600">Agregá el primer trabajo</p>
-          </div>
-        )}
+          )}
+        </AnimatePresence>
       </div>
-      <AddJobModal
-        open={openModal}
-        onClose={() => {
-          setOpenModal(false);
-          setEditingJob(null);
-        }}
-        onJobCreated={fetchJobs}
-        editingJob={editingJob}
-      />
     </main>
   );
 }
