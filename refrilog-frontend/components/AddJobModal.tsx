@@ -44,11 +44,15 @@ export function AddJobModal({
       if (editingJob) {
         await jobsService.update(editingJob.id, data);
 
-        toast.success("Trabajo actualizado");
+        toast.success("Trabajo agregado", {
+          description: "El trabajo fue guardado correctamente.",
+        });
       } else {
         await jobsService.create(data);
 
-        toast.success("Trabajo agregado con éxito");
+        toast.success("Trabajo agregado con éxito", {
+          description: "El trabajo fue guardado correctamente.",
+        });
       }
 
       onJobCreated();
@@ -57,7 +61,9 @@ export function AddJobModal({
 
       onClose();
     } catch (error) {
-      toast.error("Error al guardar trabajo");
+      toast.error("Error al guardar", {
+        description: "Ocurrió un problema inesperado.",
+      });
 
       console.error(error);
     }

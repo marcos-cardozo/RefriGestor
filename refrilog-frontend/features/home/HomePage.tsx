@@ -13,6 +13,7 @@ import { StatsCard } from "@/components/StatsCard";
 import { useJobs } from "./hooks/useJobs";
 import { useJobStats } from "./hooks/useJobStats";
 import { SkeletonCard } from "@/components/SkeletonCard";
+import { EarningsChart } from "@/components/EarningsChart";
 
 export default function HomePage() {
   const [openModal, setOpenModal] = useState(false);
@@ -33,6 +34,25 @@ export default function HomePage() {
     setOpenModal(true);
   };
 
+  const chartData = [
+    {
+      month: "Ene",
+      total: 120000,
+    },
+    {
+      month: "Feb",
+      total: 180000,
+    },
+    {
+      month: "Mar",
+      total: 90000,
+    },
+    {
+      month: "Abr",
+      total: 250000,
+    },
+  ];
+
   return (
     <main className="min-h-screen bg-linear-to-br from-cyan-100 via-blue-100 to-slate-200 p-4!">
       <div className="mx-auto flex min-h-[calc(100vh-2rem)] max-w-md flex-col rounded-[2.5rem] border border-white/30 bg-white/30 p-5! shadow-2xl backdrop-blur-xl">
@@ -43,7 +63,8 @@ export default function HomePage() {
 
           <StatsCard title="Ganancias del año" value={yearlyTotal} icon="📈" />
         </div>
-        <div className="mb-4!">
+        <EarningsChart data={chartData} />
+        <div className="mb-4! mt-4!">
           <input
             type="text"
             placeholder="🔍 Buscar cliente..."
@@ -71,7 +92,7 @@ export default function HomePage() {
 
         <div
           onClick={() => setOpenModal(true)}
-          className="flex justify-center items-center pt-3! pb-3!"
+          className="flex justify-center items-center pb-3!"
         >
           <Button title="+ Nuevo trabajo" />
         </div>
