@@ -26,6 +26,11 @@ export function JobCard({ job, onDelete, onEdit }: JobCardProps) {
       transition={{
         duration: 0.3,
       }}
+      exit={{
+        opacity: 0,
+        scale: 0.9,
+        y: -20,
+      }}
       className="w-full rounded-2xl border border-white/10 bg-zinc-900/80 p-4! text-white shadow-xl shadow-black/20 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98]"
     >
       <div className="mb-2! flex items-center justify-between">

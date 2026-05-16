@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+declare module "next-pwa" {
+  const withPWA: any;
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
+  export default withPWA;
+}
+const nextConfig = {};
