@@ -34,10 +34,10 @@ export function JobCard({ job, onDelete, onEdit }: JobCardProps) {
       className="w-full rounded-2xl border border-white/10 bg-zinc-900/80 p-4! text-white shadow-xl shadow-black/20 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98]"
     >
       <div className="mb-2! flex items-center justify-between">
-        <h2 className="text-lg font-bold">{job.clientName}</h2>
+        <h2 className="text-lg font-(--font-space)">{job.clientName}</h2>
 
-        <div className="rounded-2xl bg-green-300">
-          <span className="p-2! text-lg font-semibold text-green-800">
+        <div className="rounded-2xl bg-green-300 ">
+          <span className="p-2! text-lg text-green-800 font-(--font-mono)">
             ${job.amount}
           </span>
         </div>
