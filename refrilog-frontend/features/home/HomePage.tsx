@@ -72,7 +72,12 @@ export default function HomePage() {
 
           <StatsCard title="Ganancias del año" value={yearlyTotal} icon="📈" />
 
-          <StatsCard title="Trabajos" value={jobsCount} icon="🛠️" />
+          <StatsCard
+            title="Trabajos"
+            value={jobsCount}
+            icon="🛠️"
+            showMoney={false}
+          />
 
           <StatsCard
             title="Promedio"
