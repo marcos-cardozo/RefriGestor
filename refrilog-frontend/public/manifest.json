@@ -1,6 +1,6 @@
 {
-  "name": "RefriLog",
-  "short_name": "RefriLog",
+  "name": "RefriGestor",
+  "short_name": "RefriGestor",
   "description": "Gestión de trabajos de refrigeración",
   "start_url": "/",
   "display": "standalone",
