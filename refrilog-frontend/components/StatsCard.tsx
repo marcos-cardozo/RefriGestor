@@ -10,10 +10,10 @@ export function StatsCard({ title, value, icon }: StatsCardProps) {
       <div className="mb-2! flex items-center gap-2">
         <span className="text-2xl">{icon}</span>
 
-        <h3 className="text-sm font-medium text-zinc-300">{title}</h3>
+        <h3 className="text-sm text-zinc-300 font-(--font-space)">{title}</h3>
       </div>
 
-      <p className="text-2xl font-bold tracking-tight text-green-400">
+      <p className="text-2xl tracking-tight text-green-400 font-(--font-mono)">
         ${value.toLocaleString("es-AR")}
       </p>
     </div>

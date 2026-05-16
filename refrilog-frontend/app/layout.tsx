@@ -2,6 +2,22 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +45,13 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body
+        className={`
+    ${inter.variable}
+    ${spaceGrotesk.variable}
+    ${jetbrainsMono.variable}
+  `}
+      >
         {children}
         <Toaster
           position="top-center"
