@@ -189,7 +189,10 @@ export default function HomePage() {
           {openModal && (
             <AddJobModal
               open={openModal}
-              onClose={() => setOpenModal(false)}
+              onClose={() => {
+                setOpenModal(false);
+                setEditingJob(null);
+              }}
               onJobCreated={fetchJobs}
               editingJob={editingJob}
             />
